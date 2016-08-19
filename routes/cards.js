@@ -50,11 +50,17 @@ router.put('/:id', function (req, res) {
 
 /* DELETE /cards/:id */
 router.delete('/:id', function (req, res) {
-    Card.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+    Card.findById(req.params.id, req.body, function (err, card) {
         if (err) {
             res.status(404).json({data: 'Card not found.'});
         }
-        res.json(post);
+        card.removed = true;
+        card.save(function (err) {
+            if (err) {
+                res.status(500).json({data: 'Card internal error.'});
+            }
+            res.json(card);
+        });
     });
 });
 
