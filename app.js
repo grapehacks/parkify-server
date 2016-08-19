@@ -4,7 +4,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var users = require('./routes/users');
+var draw = require('./routes/draw');
 var main = require('./routes/main');
+
+var router = express.Router();
 
 // load mongoose package
 var mongoose = require('mongoose');
@@ -13,7 +16,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 // connect to MongoDB
-mongoose.connect('mongodb://grapeapps:Grape2016@ds063715.mlab.com:63715/parkify').then(function () {
+mongoose.connect('mongodb://grapeapps:Grape2016@ds063715.mlab.com:63715/parkify-dev').then(function () {
     console.log('connected to DB');
 }).catch(function (err) {
     console.error(err)
@@ -30,10 +33,16 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', main);
-app.use('/users', users);
+//MIDDLEWARE TO LOG REQUESTS
+app.use(function (req, res, next) {
+    console.log('Received request: ', req.method, ' ', req.url, ' body:', req.body);
+    next();
+});
 
-// error handlers
+app.use('/', main);
+app.use('/api/users', users);
+app.use('/api/draw', draw);
+
 
 // development error handler
 // will print stacktrace
