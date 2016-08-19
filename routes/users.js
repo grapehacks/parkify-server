@@ -11,7 +11,7 @@ var User = mongoose.model('User', require('../models/Users.js'));
 router.get('/', function (req, res) {
     User.find(function (err, users) {
         if (err) {
-            res.status(500).json({data: 'Internat user error.'});
+            res.status(500).json({data: 'Internal user error.'});
         }
         res.json(users);
     });
@@ -33,7 +33,7 @@ router.post('/', function (req, res) {
 router.get('/:id', function (req, res) {
     User.findById(req.params.id, function (err, post) {
         if (err) {
-            res.status(404).json({data: 'Card not found.'});
+            res.status(404).json({data: 'User not found.'});
         }
         res.json(post);
     });
@@ -43,7 +43,7 @@ router.get('/:id', function (req, res) {
 router.put('/:id', function (req, res) {
     User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
         if (err) {
-            res.status(404).json({data: 'Card not found.'});
+            res.status(404).json({data: 'User not found.'});
         }
         res.json(post);
     });
@@ -51,11 +51,17 @@ router.put('/:id', function (req, res) {
 
 /* DELETE /users/:id */
 router.delete('/:id', function (req, res) {
-    User.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+    User.findById(req.params.id, req.body, function (err, user) {
         if (err) {
-            res.status(404).json({data: 'Card not found.'});
+            res.status(404).json({data: 'User not found.'});
         }
-        res.json(post);
+        user.removed = true;
+        user.save(function (err) {
+            if (err) {
+                res.status(500).json({data: 'User internal error.'});
+            }
+            res.json(user);
+        });
     });
 });
 
