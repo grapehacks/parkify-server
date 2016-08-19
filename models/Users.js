@@ -5,9 +5,9 @@ var ObjectId = Schema.ObjectId;
 
 var UserSchema = new mongoose.Schema({
     _id: ObjectId,
-    email: String,
-    password: String,
-    name: String,
+    email: {type: String, unique: true, required: true},
+    password: {type: String, required: true},
+    name: {type: String, unique: true, required: true},
     type: {type: Number, default: 0, min: 0, max: 1},
     participate: {type: Number, default: 1, min: 0, max: 2},
     rememberLastChoice: {type: Boolean, default: false},

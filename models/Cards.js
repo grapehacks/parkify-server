@@ -5,7 +5,7 @@ var ObjectId = Schema.ObjectId;
 
 var CardSchema = new mongoose.Schema({
     _id: ObjectId,
-    name: String,
+    name: {type: String, unique: true, required: true},
     type: String,
     active: Boolean,
     removed: Boolean,
