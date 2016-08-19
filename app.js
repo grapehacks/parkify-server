@@ -1,11 +1,14 @@
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
+var jwt = require('jsonwebtoken');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var users = require('./routes/users');
 var draw = require('./routes/draw');
 var main = require('./routes/main');
+var config = require('./config');
 
 var router = express.Router();
 
@@ -16,16 +19,18 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 // connect to MongoDB
-mongoose.connect('mongodb://grapeapps:Grape2016@ds063715.mlab.com:63715/parkify-dev').then(function () {
+mongoose.connect(config.database).then(function () {
     console.log('connected to DB');
 }).catch(function (err) {
     console.error(err)
 });
 
+
 var app = express();
 app.use(express['static'](__dirname + '/public'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
+app.set('jwtTokenSecret', config.secret);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -36,6 +41,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 //MIDDLEWARE TO LOG REQUESTS
 app.use(function (req, res, next) {
     console.log('Received request: ', req.method, ' ', req.url, ' body:', req.body);
+    next();
+});
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
