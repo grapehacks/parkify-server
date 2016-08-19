@@ -55,12 +55,12 @@ var draw = function(users, cards) {
 var Drawer = function (){
 
     this.setDrawDate = function(drawDate){
-        console.log("lorem uipsom", drawDate);
         // TODO: Validation
         var prommise = new Promise(function (resolve, reject) {
             DrawDate.remove({}, function (err) {
                 if (err){
                     reject();
+                    return;
                 }
                 DrawDate.create({
                     date: drawDate

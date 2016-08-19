@@ -23,7 +23,7 @@ router.get('/', function (req, res) {
 router.put('/draw-date', auth.hasRole('admin'), function (req, res) {
     var dateToSet = req.body;
     drawer
-        .setDrawDate(new Date(dateToSet.date))
+        .setDrawDate(dateToSet.date)
         .then(function () {
             res.json({});
         }).catch(function () {
