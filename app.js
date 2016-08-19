@@ -4,6 +4,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var users = require('./routes/users');
+var cards = require('./routes/cards');
 var draw = require('./routes/draw');
 var main = require('./routes/main');
 
@@ -35,12 +36,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //MIDDLEWARE TO LOG REQUESTS
 app.use(function (req, res, next) {
-    console.log('Received request: ', req.method, ' ', req.url, ' body:', req.body);
+    console.log('Received request. Body:', req.body);
     next();
 });
 
 app.use('/', main);
 app.use('/api/users', users);
+app.use('/api/cards', cards);
 app.use('/api/draw', draw);
 
 

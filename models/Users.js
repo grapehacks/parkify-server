@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 var Card = require('./Cards');
 var Schema = mongoose.Schema;
-var ObjectIdSchema = Schema.ObjectId;
-var ObjectId = mongoose.Types.ObjectId;
+var ObjectId = Schema.ObjectId;
 
 var UserSchema = new mongoose.Schema({
-    _id: {type: ObjectIdSchema, default: new ObjectId()},
+    _id: ObjectId,
     email: String,
     password: String,
     name: String,
