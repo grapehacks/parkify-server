@@ -12,7 +12,7 @@ var router = express.Router();
 router.get('/ping', function(req, res, next) {
     DrawDate.findOne({}, function (err, drawDate) {
         var ping = { date: undefined };
-       if (!drawDate) {
+       if (drawDate) {
             ping.date = drawDate.date;
        }
 

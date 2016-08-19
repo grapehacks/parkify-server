@@ -1,6 +1,6 @@
 var express = require('express');
 var drawer = require('../services/Drawer.js');
-var auth = require('./auth/auth');
+var auth = require('../auth/auth');
 
 var router = express.Router();
 
@@ -22,9 +22,13 @@ router.get('/', function (req, res) {
 
 router.put('/draw-date', auth.hasRole('admin'), function (req, res) {
     var dateToSet = req.body;
-    console.log(dateToSet);
-    drawer.setDrawDate(dateToSet.date);
-    res.ok();
+    drawer
+        .setDrawDate(new Date(dateToSet.date))
+        .then(function () {
+            res.json({});
+        }).catch(function () {
+            res.statusCode(400).json({data: 'Bad request'});
+    });
 });
 //
 ///* POST /users */

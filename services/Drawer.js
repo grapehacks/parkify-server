@@ -55,12 +55,25 @@ var draw = function(users, cards) {
 var Drawer = function (){
 
     this.setDrawDate = function(drawDate){
+        console.log("lorem uipsom", drawDate);
         // TODO: Validation
-
-        DrawDate.remove({});
-        DrawDate.add({
-            date: drawDate
+        var prommise = new Promise(function (resolve, reject) {
+            DrawDate.remove({}, function (err) {
+                if (err){
+                    reject();
+                }
+                DrawDate.create({
+                    date: drawDate
+                }, function (err) {
+                    if (err) {
+                        reject();
+                    } else {
+                        resolve();
+                    }
+                });
+            });
         });
+        return prommise;
     };
 
     this.draw = function () {
