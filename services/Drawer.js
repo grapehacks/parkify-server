@@ -54,29 +54,7 @@ var draw = function(users, cards) {
 
 var Drawer = function (){
 
-    this.setDrawDate = function(drawDate){
-        // TODO: Validation
-        var prommise = new Promise(function (resolve, reject) {
-            DrawDate.remove({}, function (err) {
-                if (err){
-                    reject();
-                    return;
-                }
-                DrawDate.create({
-                    date: drawDate
-                }, function (err) {
-                    if (err) {
-                        reject();
-                    } else {
-                        resolve();
-                    }
-                });
-            });
-        });
-        return prommise;
-    };
-
-    this.draw = function () {
+    var draw = function () {
         var promise = new Promise(function (resolve, reject) {
             User
                 .find(
@@ -104,7 +82,29 @@ var Drawer = function (){
                     });
         });
         return promise;
-    }
+    };
+
+    this.setDrawDate = function(drawDate){
+        // TODO: Validation
+        var prommise = new Promise(function (resolve, reject) {
+            DrawDate.remove({}, function (err) {
+                if (err){
+                    reject();
+                    return;
+                }
+                DrawDate.create({
+                    date: drawDate
+                }, function (err) {
+                    if (err) {
+                        reject();
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        });
+        return prommise;
+    };
 };
 
 module.exports = new Drawer();
