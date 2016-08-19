@@ -1,5 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var drawer = require('../services/Drawer.js');
 
 var router = express.Router();
 
@@ -17,6 +18,12 @@ router.get('/', function (req, res) {
     //  }
     //    res.json(users);
     //});
+});
+
+router.get('/test-draw', function (req, res) {
+    new drawer().draw().then(function (drawResult) {
+        res.json(drawResult);
+    });
 });
 //
 ///* POST /users */
