@@ -8,7 +8,7 @@ var DrawSchema = new mongoose.Schema({
     card: Card
 });
 
-mongoose.Model('Draw', DrawSchema);
+mongoose.model('Draw', DrawSchema);
 module.exports = DrawSchema;
 
 
