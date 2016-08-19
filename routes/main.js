@@ -39,6 +39,7 @@ router.post('/authenticate', function(req, res) {
 
                 res.json({
                     message: 'Auth succeeded',
+                    user: user,
                     token: token
                 });
             }
@@ -46,35 +47,5 @@ router.post('/authenticate', function(req, res) {
     })
 });
 
-// route middleware to verify a token
-router.use(function(req, res, next) {
-
-    // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-    // decode token
-    if (token) {
-
-        // verifies secret and checks exp
-        jwt.verify(token, req.app.get('jwtTokenSecret'), function(err, decoded) {
-            if (err) {
-                return res.status(401).json({message: 'Unauthorized access.' });
-            } else {
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                next();
-            }
-        });
-
-    } else {
-
-        // if there is no token
-        // return an error
-        return res.status(403).send({
-            message: 'No token provided.'
-        });
-
-    }
-});
 
 module.exports = router;
