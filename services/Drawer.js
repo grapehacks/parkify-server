@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 var User = mongoose.model('User', require('../models/Users.js'));
 var Card = mongoose.model('Card', require('./../models/Cards.js'));
+var DrawDate = mongoose.model('DrawDate', require('../models/DrawDate.js'));
 
 var draw = function(users, cards) {
     var drawNext = function drawNext(users, cards, results) {
@@ -52,9 +53,18 @@ var draw = function(users, cards) {
 }
 
 var Drawer = function (){
+
+    this.setDrawDate = function(drawDate){
+        // TODO: Validation
+
+        DrawDate.remove({});
+        DrawDate.add({
+            date: drawDate
+        });
+    };
+
     this.draw = function () {
         var promise = new Promise(function (resolve, reject) {
-
             User
                 .find(
                     {"removed" : false},

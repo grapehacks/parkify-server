@@ -4,13 +4,21 @@ var mocks = require('../mocks.js');
 var mongoose = require('mongoose');
 
 var User = mongoose.model('User', require('../models/Users.js'));
+var DrawDate = mongoose.model('DrawDate', require('../models/DrawDate.js'));
 
 var router = express.Router();
 
 /* GET /users listing. */
 router.get('/ping', function(req, res, next) {
-    //TODO: implement
-    res.json(mocks.getter.ping);
+    DrawDate.findOne({}, function (err, drawDate) {
+        var ping = { date: undefined };
+       if (!drawDate) {
+            ping.date = drawDate.date;
+       }
+
+        res.json(ping);
+    });
+
 });
 
 router.post('/authenticate', function(req, res) {
