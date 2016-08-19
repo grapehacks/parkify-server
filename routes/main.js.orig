@@ -13,6 +13,13 @@ router.get('/ping', function(req, res, next) {
     res.json(mocks.getter.ping);
 });
 
+<<<<<<< HEAD
+=======
+router.get('/draw', function(req, res, next) {
+    //TODO: implement
+    res.json(mocks.getter.draw);
+});
+
 router.post('/authenticate', function(req, res) {
     User.findOne({
         email: req.body.email
@@ -69,4 +76,5 @@ router.use(function(req, res, next) {
     }
 });
 
+>>>>>>> master
 module.exports = router;

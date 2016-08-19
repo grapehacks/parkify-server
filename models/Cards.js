@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
 var User = require('./Users');
-
+var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 
 var CardSchema = new mongoose.Schema({
-    name: String,
+    _id: ObjectId,
+    name: {type: String, unique: true, required: true},
     type: String,
     active: Boolean,
     removed: Boolean,
