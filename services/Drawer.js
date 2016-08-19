@@ -1,9 +1,12 @@
-var User = require('./../models/Users');
-var Card = require('./../models/Cards');
-var Draw = require('./../models/Draws');
+var mongoose = require('mongoose');
+
+var User = mongoose.model('User', require('../models/Users.js'));
+var Card = mongoose.model('Card', require('./../models/Cards.js'));
 
 var draw = function(users, cards) {
     var drawNext = function drawNext(users, cards, results) {
+        console.log("users ", users.length, " cards ", cards.length, " results ", results.length);
+
         if (cards.length === 0 || users.length == 0) {
             return results;
         }
@@ -26,24 +29,23 @@ var draw = function(users, cards) {
             }
         }, { userIndex: undefined, subSum:0.0 });
 
-        console.info(drawnUserData);
-
         if (drawnUserData.userIndex === undefined) {
             throw new Error("Unable to draw a user");
         }
 
         var user = users[drawnUserData.userIndex];
-        users.splice(drawnUserData.userIndex);
+        users.splice(drawnUserData.userIndex, 1);
 
         // TODO: Check if user had a card and match'em.
         var cardIndex = 0;
         var card = cards[cardIndex];
-        cards.splice(cardIndex);
+        cards.splice(cardIndex, 1);
 
-        results.add({
+        results.push({
             "winner" : user,
             "card" : card
-        })
+        });
+        return drawNext(users, cards, results);
     };
 
     return drawNext(users, cards, []);
@@ -51,38 +53,35 @@ var draw = function(users, cards) {
 
 var Drawer = function (){
     this.draw = function () {
-        // TODO: load data from DB
-        var cards = [{
-            "name": "Card1",
-            "type": "Parking 1"
-        }, {
-            "name": "Card2",
-            "type": "Parking 2"
-        }];
+        var promise = new Promise(function (resolve, reject) {
 
-        var users = [{
-            "name": "Eric Bennett",
-            "email": "ebennett5@reverbnation.com"
-        },{
-            "name": "Angela Collins",
-            "email": "acollins4@hc360.com"
-        },{
-            "name": "Angela Fox",
-            "email": "afox3@list-manage.com"
-        }];
-        // End TODO: load data from DB
+            User
+                .find(
+                    {"removed" : false},
+                    function (err, items) {
+                        var users = items.filter(function(item){
+                            return item.participate !== 0;
+                        });
+                        // TODO: Find better way to assign weight
+                        users.forEach(function (item) {
+                            item.weight = 1.0;
+                        });
 
-        // TODO: Find better way to assign weight
-        users.forEach(function (item) {
-
-            item.weight = 1.0;
+                        Card.find(
+                            {
+                                "removed": false,
+                                "active": true
+                            },
+                            function(err2, cards){
+                                console.log("Cards ", cards);
+                                var drawResult = draw(users, cards);
+                                resolve(drawResult);
+                            }
+                        );
+                    });
         });
-        // End TODO: Find better way to assign weight
-
-        var drawResult = draw(users, cards);
-
-        console.log(drawResult);
+        return promise;
     }
 };
 
-module.exports = Drawer;
+module.exports = new Drawer();

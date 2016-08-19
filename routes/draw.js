@@ -21,7 +21,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/test-draw', function (req, res) {
-    new drawer().draw().then(function (drawResult) {
+    drawer.draw().then(function (drawResult) {
         res.json(drawResult);
     });
 });
