@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
-var User = require('./Users');
-var Draw = require('./Draws');
 
 var HistorySchema = new mongoose.Schema({
-    date: {type: Date, default: Date.now()},
-    winners: [{type: mongoose.Schema.Types.ObjectId, ref: 'Draw'}],
+    date: {type: Date, default: Date.now},
+    winners: [{
+        user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+        card: {type: mongoose.Schema.Types.ObjectId, ref: 'Card'}
+    }],
     users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     specialCases: []
 });

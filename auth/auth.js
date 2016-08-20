@@ -15,6 +15,7 @@ function readToken(failOnError) {
         .use(function(req, res, next) {
             var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
+            console.info("Read token");
             // decode token
             if (token) {
                 // verifies secret and checks exp
