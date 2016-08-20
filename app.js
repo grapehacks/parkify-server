@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var users = require('./routes/users');
 var cards = require('./routes/cards');
 var draw = require('./routes/draw');
+var messages = require('./routes/messages');
+var participate = require('./routes/participate');
 var main = require('./routes/main');
 var config = require('./config');
 var auth = require('./auth/auth');
@@ -53,6 +55,8 @@ app.use(function (req, res, next) {
 app.use('/', main);
 app.use('/api/users', auth.hasRole('admin'), users);
 app.use('/api/cards', auth.hasRole('user'), cards);
+app.use('/api/participate', auth.hasRole('user'), participate);
+app.use('/api/messages', auth.isAuthenticated(), messages);
 app.use('/api/draw', draw);
 
 
@@ -69,8 +73,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    console.log('oj2', err)
-
+    console.log('oj2', err);
 });
 
 

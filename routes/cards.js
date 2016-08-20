@@ -18,8 +18,6 @@ router.get('/', function (req, res) {
 
 /* POST /cards */
 router.post('/', function (req, res) {
-    var data = req.body;
-    data._id = new ObjectId();
     Card.create(req.body, function (err, post) {
         if (err) {
             res.status(400).json({data: 'Bad request.'});
