@@ -25,9 +25,11 @@ router.put('/draw-date', auth.hasRole('admin'), function (req, res) {
     drawer
         .setDrawDate(dateToSet.date)
         .then(function () {
+            console.log("Success");
             res.json({});
         }).catch(function () {
-            res.statusCode(400).json({data: 'Bad request'});
+            console.log("Fail");
+            res.status(400).json({data: 'Bad request'});
     });
 });
 //

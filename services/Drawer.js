@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var schedule = require('node-schedule');
 
 var User = mongoose.model('User', require('../models/Users.js'));
 var Card = mongoose.model('Card', require('./../models/Cards.js'));
@@ -53,36 +54,53 @@ var draw = function(users, cards) {
 }
 
 var Drawer = function (){
+    var job = undefined;
 
     var draw = function () {
-        var promise = new Promise(function (resolve, reject) {
-            User
-                .find(
-                    {"removed" : false},
-                    function (err, items) {
-                        var users = items.filter(function(item){
-                            return item.participate !== 0;
-                        });
-                        // TODO: Find better way to assign weight
-                        users.forEach(function (item) {
-                            item.weight = 1.0;
-                        });
-
-                        Card.find(
-                            {
-                                "removed": false,
-                                "active": true
-                            },
-                            function(err2, cards){
-                                console.log("Cards ", cards);
-                                var drawResult = draw(users, cards);
-                                resolve(drawResult);
-                            }
-                        );
+        console.log("Draw started");
+        User
+            .find(
+                {"removed": false},
+                function (err, items) {
+                    var users = items.filter(function (item) {
+                        return item.participate !== 0;
                     });
-        });
-        return promise;
+                    console.log("Users to draw found", users.length);
+                    // TODO: Find better way to assign weight
+                    users.forEach(function (item) {
+                        item.weight = 1.0;
+                    });
+
+                    Card.find(
+                        {
+                            "removed": false,
+                            "active": true
+                        },
+                        function (err2, cards) {
+                            console.log("Cards to draw found", cards.length);
+                            var drawResult = draw(users, cards);
+                            DrawDate.remove({});
+
+                            // TODO: messages/users/cards update
+                        }
+                    );
+                });
     };
+
+    var scheduleDraw = function (drawDate) {
+        console.log("Schedule with date", drawDate);
+        if (job !== undefined){
+            console.log("Previous schedule cancel");
+            job.cancel();
+        }
+        job = schedule.scheduleJob(drawDate, draw);
+    };
+
+    DrawDate.findOne({}, function (err, drawDate) {
+        if (drawDate){
+            scheduleDraw(drawDate.date);
+        }
+    });
 
     this.setDrawDate = function(drawDate){
         // TODO: Validation
@@ -97,9 +115,11 @@ var Drawer = function (){
                 }, function (err) {
                     if (err) {
                         reject();
-                    } else {
-                        resolve();
+                        return;
                     }
+
+                    scheduleDraw(drawDate);
+                    resolve();
                 });
             });
         });
