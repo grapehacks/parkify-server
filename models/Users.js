@@ -11,7 +11,7 @@ var UserSchema = new mongoose.Schema({
     participate: {type: Number, default: 1, min: 0, max: 2},
     rememberLastChoice: {type: Boolean, default: false},
     removed: Boolean,
-    unreadMsgCounter: Number,
+    unreadMsgCounter: {type: Number, default: 0, min: 0},
     card: {type: mongoose.Schema.Types.ObjectId, ref: 'Card'}
 });
 
