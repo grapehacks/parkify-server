@@ -57,9 +57,10 @@ var Drawer = function (){
             .find(
                 {"removed": false},
                 function (err, users) {
-                    var userDrawData = users.filter(function (item) {
+                    var participants =  users.filter(function (item) {
                         return item.participate !== 0;
-                    }).map(function (user) {
+                    });
+                    var userDrawData = participants.map(function (user) {
                         // TODO: Find better way to assign weight
                         return {
                             "user": user,
@@ -83,6 +84,11 @@ var Drawer = function (){
                         function (err2, cards) {
                             console.log("Cards to draw found", cards.length);
                             var drawnUsers = drawUsers(userDrawData, cards.length);
+
+                            History.create({
+                                winner: drawnUsers,
+                                users: participants
+                            });
 
                             var usersThatHadCardAlready = drawnUsers.filter(function (user) {
                                 return user.card != undefined;
