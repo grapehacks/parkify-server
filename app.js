@@ -56,7 +56,7 @@ app.use('/', main);
 app.use('/api/users', auth.hasRole('admin'), users);
 app.use('/api/cards', auth.hasRole('user'), cards);
 app.use('/api/participate', auth.hasRole('user'), participate);
-app.use('/api/messages', auth.isAuthenticated(), messages);
+app.use('/api/messages', auth.verifyAuthentication(true), messages);
 app.use('/api/draw', draw);
 
 
