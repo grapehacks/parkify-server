@@ -10,7 +10,7 @@ var UserSchema = new mongoose.Schema({
     type: {type: Number, default: 0, min: 0, max: 1},
     participate: {type: Number, default: 1, min: 0, max: 2},
     rememberLastChoice: {type: Boolean, default: false},
-    removed: Boolean,
+    removed: {type: Boolean, default: false},
     unreadMsgCounter: {type: Number, default: 0, min: 0},
     card: {type: mongoose.Schema.Types.ObjectId, ref: 'Card'}
 });
@@ -18,7 +18,6 @@ var UserSchema = new mongoose.Schema({
 UserSchema
     .virtual('password')
     .set(function(password) {
-        console.log("generate password");
         this._password = password;
         this.salt = this.makeSalt();
         this.hashedPassword = this.encryptPassword(password);

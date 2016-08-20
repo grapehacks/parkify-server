@@ -6,8 +6,8 @@ var ObjectId = Schema.ObjectId;
 var CardSchema = new mongoose.Schema({
     name: {type: String, unique: true, required: true},
     type: String,
-    active: Boolean,
-    removed: Boolean,
+    active: {type: Boolean, default: true},
+    removed: {type: Boolean, default: false},
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 mongoose.model('Card', CardSchema);

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var DrawDateSchema = new mongoose.Schema({
-    date: { type:Date }
+    date: {type: Date, default: Date.now}
 });
 
 mongoose.model('DrawDate', DrawDateSchema);

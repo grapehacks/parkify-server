@@ -9,7 +9,7 @@ var Message = mongoose.model('Message', require('../models/Messages.js'));
 /* GET /messages listing. */
 router.get('/', function (req, res) {
     var counter = req.query.count || config.defaultNumberOfMessagesToReturn;
-    Message.find({'user': req.user._id}).limit(counter).exec(function (err, messages) {
+    Message.find({'user': req.user._id}).sort({'date': -1}).limit(counter).exec(function (err, messages) {
         if (err) {
             res.status(500).json({data: 'Internal card error'});
         }
@@ -20,25 +20,19 @@ router.get('/', function (req, res) {
 /* PUT /messages/:id */
 router.post('/:id/read', function (req, res) {
     var data = {read: true};
+
     Message.findByIdAndUpdate(req.params.id, data, {new: true}, function (err, message) {
         if (err) {
             res.status(404).json({data: 'Message not found.'});
         }
-        res.json(message);
+        req.user.unreadMsgCounter = req.user.unreadMsgCounter - 1;
+        req.user.save(function (err) {
+            if (err) {
+                res.status(500).json({data: 'User error'});
+            }
+            res.json(message);
+        });
     });
 });
-
-//router.post('/', function (req, res) {
-//    req.body.user = req.user;
-//    console.log(req.body);
-//    Message.create(req.body, function (err, post) {
-//        if (err) {
-//            console.log(post, err);
-//            res.status(400).json({data: 'Bad request.'});
-//        }
-//        res.json(post);
-//    });
-//});
-
 
 module.exports = router;
