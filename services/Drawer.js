@@ -5,6 +5,7 @@ var User = mongoose.model('User', require('../models/Users.js'));
 var Card = mongoose.model('Card', require('./../models/Cards.js'));
 var Message = mongoose.model('Messages', require('./../models/Messages.js'));
 var DrawDate = mongoose.model('DrawDate', require('../models/DrawDate.js'));
+var History = mongoose.model('History', require('../models/History.js'));
 
 var drawUsers = function(usersData, amount) {
     var userFromUserData = function (userData) {
@@ -85,10 +86,7 @@ var Drawer = function (){
                             console.log("Cards to draw found", cards.length);
                             var drawnUsers = drawUsers(userDrawData, cards.length);
 
-                            History.create({
-                                winner: drawnUsers,
-                                users: participants
-                            });
+                            var winners = [];
 
                             var usersThatHadCardAlready = drawnUsers.filter(function (user) {
                                 return user.card != undefined;
@@ -105,6 +103,8 @@ var Drawer = function (){
 
                                 user.unreadMsgCounter = user.unreadMsgCounter + 1;
                                 user.save();
+
+                                winners.push({"user" : user, "card": user.card});
 
                                 var userIndex = drawnUsers.indexOf(user);
                                 drawnUsers.splice(userIndex, 1);
@@ -180,6 +180,13 @@ var Drawer = function (){
 
                                 winer.save();
                                 card.save();
+
+                                winners.push({"user" : winer, "card": card});
+                            });
+
+                            History.create({
+                                winners: winners,
+                                users: participants
                             });
 
                             DrawDate.remove({});
@@ -189,15 +196,15 @@ var Drawer = function (){
     };
 
     var scheduleDraw = function (drawDate) {
-        //console.log("Schedule with date", drawDate);
-        //if (job !== undefined){
-        //    console.log("Previous schedule cancel");
-        //    job.cancel();
-        //}
-        ////job = schedule.scheduleJob(drawDate, draw);
-        //if (!job){
-        //    job = undefined;
-        //}
+        console.log("Schedule with date", drawDate);
+        if (job !== undefined){
+            console.log("Previous schedule cancel");
+            job.cancel();
+        }
+        job = schedule.scheduleJob(drawDate, draw);
+        if (!job){
+            job = undefined;
+        }
     };
 
     DrawDate.findOne({}, function (err, drawDate) {
