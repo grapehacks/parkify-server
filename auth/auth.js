@@ -9,11 +9,7 @@ var compose = require('composable-middleware');
 
 var User = mongoose.model('User', require('../models/Users.js'));
 
-/**
- * Attaches the user object to the request if authenticated
- * Otherwise returns 403
- */
-function isAuthenticated() {
+function readToken(failOnError) {
     return compose()
         // Validate jwt
         .use(function(req, res, next) {
@@ -24,7 +20,11 @@ function isAuthenticated() {
                 // verifies secret and checks exp
                 jwt.verify(token, req.app.get('jwtTokenSecret'), function(err, decoded) {
                     if (err) {
-                        return res.status(401).json({message: 'Unauthorized access.' });
+                        console.error("Token verification failed");
+                        if (failOnError) {
+                            return res.status(401).json({message: 'Unauthorized access.' });
+                        }
+                        next();
                     } else {
                         // if everything is good, save to request for use in other routes
                         req.userId = decoded;
@@ -33,16 +33,38 @@ function isAuthenticated() {
                 });
 
             } else {
-                // if there is no token
-                // return an error
-                return res.status(403).json({message: 'No token provided.'});
+                // if there is no token log error
+                console.error("There is no token");
+                if (failOnError) {
+                    return res.status(403).json({message: 'No token provided.'});
+                }
+                next();
             }
-        })
+        });
+}
+
+/**
+ * Attaches the user object to the request if authenticated
+ * Otherwise returns 403
+ */
+function verifyAuthentication(failOnError) {
+    return compose()
+        .use(readToken(failOnError))
         // Attach user to request
         .use(function(req, res, next) {
             User.findById(req.userId, function (err, user) {
-                if (err) return next(err);
-                if (!user) return res.status(401).send('Unauthorized');
+                if (err) {
+                    console.error("Error on user fin: ", err);
+                    if (failOnError) {
+                        return next(err);
+                    }
+                }
+                if (!user) {
+                    console.error("Cannot find user for provided token");
+                    if (failOnError) {
+                        return res.status(401).send('Unauthorized');
+                    }
+                }
 
                 req.user = user;
                 next();
@@ -57,7 +79,7 @@ function hasRole(roleRequired) {
     if (!roleRequired) throw new Error('Required role needs to be set');
 
     return compose()
-        .use(isAuthenticated())
+        .use(verifyAuthentication(true))
         .use(function meetsRequirements(req, res, next) {
             if (req.app.get('userRoles')[roleRequired] <= req.user.type) {
                 next();
@@ -75,6 +97,7 @@ function signToken(id) {
     return jwt.sign({ _id: id }, config.secrets.session, { expiresInMinutes: 60*5 });
 }*/
 
-module.exports.isAuthenticated = isAuthenticated;
+module.exports.readToken = readToken;
+module.exports.verifyAuthentication = verifyAuthentication;
 module.exports.hasRole = hasRole;
 //module.exports.signToken = signToken;

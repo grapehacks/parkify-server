@@ -2,15 +2,19 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var mocks = require('../mocks.js');
 var mongoose = require('mongoose');
+var auth = require('../auth/auth');
 
 var User = mongoose.model('User', require('../models/Users.js'));
 
 var router = express.Router();
 
 /* GET /users listing. */
-router.get('/ping', function(req, res, next) {
-    //TODO: implement
-    res.json(mocks.getter.ping);
+router.get('/ping', auth.verifyAuthentication(false), function(req, res, next) {
+    if (req.user) {
+        res.json({user: req.user});
+    } else {
+        res.json(mocks.getter.ping);
+    }
 });
 
 router.get('/draw', function(req, res, next) {
