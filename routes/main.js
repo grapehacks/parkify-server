@@ -5,21 +5,24 @@ var mongoose = require('mongoose');
 var auth = require('../auth/auth');
 
 var User = mongoose.model('User', require('../models/Users.js'));
+var DrawDate = mongoose.model('DrawDate', require('../models/DrawDate.js'));
 
 var router = express.Router();
 
 /* GET /users listing. */
 router.get('/ping', auth.verifyAuthentication(false), function(req, res, next) {
-    if (req.user) {
-        res.json({user: req.user});
-    } else {
-        res.json(mocks.getter.ping);
-    }
-});
+    DrawDate.findOne(function (err, drawDate) {
+        var pong = { date: undefined };
+        if (drawDate) {
+            pong.date = drawDate.date;
+        }
 
-router.get('/draw', function(req, res, next) {
-    //TODO: implement
-    res.json(mocks.getter.draw);
+        if (req.user) {
+            pong.user = req.user;
+        }
+
+        res.json(pong);
+    });
 });
 
 router.post('/authenticate', function(req, res) {

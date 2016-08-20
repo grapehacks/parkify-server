@@ -1,5 +1,6 @@
 var express = require('express');
-var mongoose = require('mongoose');
+var drawer = require('../services/Drawer.js');
+var auth = require('../auth/auth');
 
 var router = express.Router();
 
@@ -17,6 +18,17 @@ router.get('/', function (req, res) {
     //  }
     //    res.json(users);
     //});
+});
+
+router.put('/draw-date', auth.hasRole('admin'), function (req, res) {
+    var dateToSet = req.body;
+    drawer
+        .setDrawDate(dateToSet.date)
+        .then(function () {
+            res.json({});
+        }).catch(function () {
+            res.statusCode(400).json({data: 'Bad request'});
+    });
 });
 //
 ///* POST /users */
