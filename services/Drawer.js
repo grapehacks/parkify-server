@@ -56,8 +56,8 @@ var Drawer = function (){
         User
             .find(
                 {"removed": false},
-                function (err, items) {
-                    var users = items.filter(function (item) {
+                function (err, users) {
+                    var userDrawData = users.filter(function (item) {
                         return item.participate !== 0;
                     }).map(function (user) {
                         // TODO: Find better way to assign weight
@@ -82,7 +82,7 @@ var Drawer = function (){
                         },
                         function (err2, cards) {
                             console.log("Cards to draw found", cards.length);
-                            var drawnUsers = drawUsers(users, cards.length);
+                            var drawnUsers = drawUsers(userDrawData, cards.length);
 
                             var usersThatHadCardAlready = drawnUsers.filter(function (user) {
                                 return user.card != undefined;
@@ -98,7 +98,7 @@ var Drawer = function (){
                                 });
 
                                 user.unreadMsgCounter = user.unreadMsgCounter + 1;
-                                User.update(user);
+                                user.save();
 
                                 var userIndex = drawnUsers.indexOf(user);
                                 drawnUsers.splice(userIndex, 1);
@@ -126,13 +126,54 @@ var Drawer = function (){
                                 });
 
                                 user.unreadMsgCounter = user.unreadMsgCounter + 1;
-                                User.update(user);
+                                user.save();
                             });
 
                             cards.forEach(function (card) {
-                                if (users.indexOf(card.user) >= 0){
+                                var winer = drawnUsers[0];
+                                drawnUsers.splice(0, 1);
 
+                                var looserIndex = users.indexOf(card.user);
+                                if (looserIndex >= 0){
+                                    var looser = users[looserIndex];
+                                    looser.card = undefined;
+
+                                    Message.create({
+                                        topic: "Wygrałeś",
+                                        text: "Wygrałeś. Weź kartę od: " + looser.name,
+                                        type: 3,
+                                        read: false,
+                                        user: winer
+                                    });
+                                    winer.unreadMsgCounter = winer.unreadMsgCounter + 1;
+
+                                    Message.create({
+                                        topic: "Przegrałeś",
+                                        text: "Przegrałeś. Oddaj swoją kartę: " + winer.name,
+                                        type: 1,
+                                        read: false,
+                                        user: winer
+                                    });
+
+                                    looser.unreadMsgCounter = looser.unreadMsgCounter + 1;
+                                    looser.save();
+                                } else {
+                                    Message.create({
+                                        topic: "Wygrałeś",
+                                        text: "",
+                                        type: 2,
+                                        read: false,
+                                        user: winer
+                                    });
+
+                                    winer.unreadMsgCounter = winer.unreadMsgCounter + 1;
                                 }
+
+                                winer.card = card;
+                                card.user = winer;
+
+                                winer.save();
+                                card.save();
                             });
 
                             DrawDate.remove({});
