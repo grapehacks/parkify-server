@@ -184,12 +184,14 @@ var Drawer = function (){
                                 winners.push({"user" : winer, "card": card});
                             });
 
-                            History.create({
-                                winners: winners,
-                                users: participants
-                            });
+                            setTimeout(function () {
+                                History.create({
+                                    winners: winners,
+                                    users: participants
+                                });
 
-                            DrawDate.remove({});
+                                DrawDate.remove({});
+                            }, 100);
                         }
                     );
                 });
