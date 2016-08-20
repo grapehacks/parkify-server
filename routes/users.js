@@ -20,11 +20,13 @@ router.get('/', function (req, res) {
 /* POST /users */
 router.post('/', function (req, res) {
     console.log(req.body);
-    User.create(req.body, '-salt -hashedPassword', function (err, post) {
+    User.create(req.body, function (err, post) {
         if (err) {
             console.log(err);
             res.status(400).json({data: 'Bad request'});
         }
+        post.hashedPassword = undefined;
+        post.salt = undefined;
         res.json(post);
     });
 });
@@ -45,13 +47,15 @@ router.put('/:id', function (req, res) {
         if (err) {
             res.status(404).json({data: 'User not found.'});
         }
+        post.hashedPassword = undefined;
+        post.salt = undefined;
         res.json(post);
     });
 });
 
 /* DELETE /users/:id */
 router.delete('/:id', function (req, res) {
-    User.findById(req.params.id, req.body, function (err, user) {
+    User.findById(req.params.id, '-salt -hashedPassword', function (err, user) {
         if (err) {
             res.status(404).json({data: 'User not found.'});
         }
