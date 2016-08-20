@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var users = require('./routes/users');
 var cards = require('./routes/cards');
+var history = require('./routes/history');
 var draw = require('./routes/draw');
 var messages = require('./routes/messages');
 var participate = require('./routes/participate');
@@ -48,16 +49,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
     console.log('Received request. Body:', req.body);
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, x-access-token, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    if ('OPTIONS' == req.method) {
+        res.send(200);
+    } else {
+        next();
+    }
 });
 
 app.use('/', main);
 app.use('/api/users', auth.hasRole('admin'), users);
-app.use('/api/cards', auth.hasRole('user'), cards);
-app.use('/api/participate', auth.hasRole('user'), participate);
+app.use('/api/cards', auth.hasRole('admin'), cards);
+app.use('/api/history', auth.hasRole('admin'), history);
+app.use('/api/draw', auth.hasRole('admin'), draw);
+
+app.use('/api/participate', auth.verifyAuthentication(true), participate);
 app.use('/api/messages', auth.verifyAuthentication(true), messages);
-app.use('/api/draw', draw);
 
 
 // development error handler
