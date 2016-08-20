@@ -8,7 +8,7 @@ var router = express.Router();
 /* POST /participate/register */
 router.post('/register', function (req, res) {
     var user = req.user;
-    if (req.body.rememberLastChoice) {
+    if (typeof req.body.rememberLastChoice !== 'undefined') {
         user.rememberLastChoice = req.body.rememberLastChoice;
     }
     user.participate = 1;
@@ -23,7 +23,7 @@ router.post('/register', function (req, res) {
 /* POST /participate/unregister */
 router.post('/unregister', function (req, res) {
     var user = req.user;
-    if (req.body.rememberLastChoice) {
+    if (typeof req.body.rememberLastChoice !== 'undefined') {
         user.rememberLastChoice = req.body.rememberLastChoice;
     }
     user.participate = 0;
