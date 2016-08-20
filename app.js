@@ -52,7 +52,7 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, x-access-token, Content-Type, Accept");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     if ('OPTIONS' == req.method) {
-        res.send(200);
+        res.status(200);
     } else {
         next();
     }
