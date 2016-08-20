@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var HistorySchema = new mongoose.Schema({
-    date: {type: Date, default: Date.now()},
+    date: {type: Date, default: Date.now},
     winners: [{
         user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
         card: {type: mongoose.Schema.Types.ObjectId, ref: 'Card'}

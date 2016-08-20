@@ -7,5 +7,6 @@ module.exports = {
     'userRoles': {
         'user': 0,
         'admin': 1
-    }
-}
+    },
+    defaultNumberOfMessagesToReturn: 10
+};
