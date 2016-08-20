@@ -5,53 +5,49 @@ var User = mongoose.model('User', require('../models/Users.js'));
 var Card = mongoose.model('Card', require('./../models/Cards.js'));
 var DrawDate = mongoose.model('DrawDate', require('../models/DrawDate.js'));
 
-var draw = function(users, cards) {
-    var drawNext = function drawNext(users, cards, results) {
-        console.log("users ", users.length, " cards ", cards.length, " results ", results.length);
+var drawNext = function drawNext(users, cards, results) {
+    console.log("users ", users.length, " cards ", cards.length, " results ", results.length);
 
-        if (cards.length === 0 || users.length == 0) {
-            return results;
-        }
-        var sumWeight = users.reduce(function(prev, curr) { return prev + curr.weight}, 0.0);
-        var drawnValue = Math.random() * sumWeight;
+    if (cards.length === 0 || users.length == 0) {
+        return results;
+    }
+    var sumWeight = users.reduce(function(prev, curr) { return prev + curr.weight}, 0.0);
+    var drawnValue = Math.random() * sumWeight;
 
-        var drawnUserData = users.reduce(function (prev, curr, index) {
-            var userIndex = prev.userIndex;
-            var subSum = prev.subSum;
+    var drawnUserData = users.reduce(function (prev, curr, index) {
+        var userIndex = prev.userIndex;
+        var subSum = prev.subSum;
 
-            subSum = subSum + curr.weight;
+        subSum = subSum + curr.weight;
 
-            if (drawnValue > prev.subSum && drawnValue <= subSum) {
-                userIndex = index;
-            }
-
-            return {
-                userIndex: userIndex,
-                subSum: subSum
-            }
-        }, { userIndex: undefined, subSum:0.0 });
-
-        if (drawnUserData.userIndex === undefined) {
-            throw new Error("Unable to draw a user");
+        if (drawnValue > prev.subSum && drawnValue <= subSum) {
+            userIndex = index;
         }
 
-        var user = users[drawnUserData.userIndex];
-        users.splice(drawnUserData.userIndex, 1);
+        return {
+            userIndex: userIndex,
+            subSum: subSum
+        }
+    }, { userIndex: undefined, subSum:0.0 });
 
-        // TODO: Check if user had a card and match'em.
-        var cardIndex = 0;
-        var card = cards[cardIndex];
-        cards.splice(cardIndex, 1);
+    if (drawnUserData.userIndex === undefined) {
+        throw new Error("Unable to draw a user");
+    }
 
-        results.push({
-            "winner" : user,
-            "card" : card
-        });
-        return drawNext(users, cards, results);
-    };
+    var user = users[drawnUserData.userIndex];
+    users.splice(drawnUserData.userIndex, 1);
 
-    return drawNext(users, cards, []);
-}
+    // TODO: Check if user had a card and match'em.
+    var cardIndex = 0;
+    var card = cards[cardIndex];
+    cards.splice(cardIndex, 1);
+
+    results.push({
+        "winner" : user,
+        "card" : card
+    });
+    return drawNext(users, cards, results);
+};
 
 var Drawer = function (){
     var job = undefined;
@@ -78,7 +74,7 @@ var Drawer = function (){
                         },
                         function (err2, cards) {
                             console.log("Cards to draw found", cards.length);
-                            var drawResult = draw(users, cards);
+                            var drawResult = drawNext(users, cards, []);
                             DrawDate.remove({});
 
                             // TODO: messages/users/cards update
@@ -94,6 +90,9 @@ var Drawer = function (){
             job.cancel();
         }
         job = schedule.scheduleJob(drawDate, draw);
+        if (!job){
+            job = undefined;
+        }
     };
 
     DrawDate.findOne({}, function (err, drawDate) {
@@ -110,6 +109,11 @@ var Drawer = function (){
                     reject();
                     return;
                 }
+                if (drawDate < Date.now()){
+                    reject();
+                    return;
+                }
+
                 DrawDate.create({
                     date: drawDate
                 }, function (err) {
