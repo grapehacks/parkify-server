@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var UserSchema = new mongoose.Schema({
-    _id: ObjectId,
     email: {type: String, unique: true, required: true},
     password: {type: String, required: true},
     name: {type: String, unique: true, required: true},
@@ -13,7 +12,7 @@ var UserSchema = new mongoose.Schema({
     rememberLastChoice: {type: Boolean, default: false},
     removed: Boolean,
     unreadMsgCounter: Number,
-    card: Card
+    card: {type: mongoose.Schema.Types.ObjectId, ref: 'Card'}
 });
 mongoose.model('User', UserSchema);
 module.exports = UserSchema;

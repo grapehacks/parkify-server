@@ -2,6 +2,7 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var mocks = require('../mocks.js');
 var mongoose = require('mongoose');
+var auth = require('../auth/auth');
 
 var User = mongoose.model('User', require('../models/Users.js'));
 var DrawDate = mongoose.model('DrawDate', require('../models/DrawDate.js'));
@@ -9,16 +10,19 @@ var DrawDate = mongoose.model('DrawDate', require('../models/DrawDate.js'));
 var router = express.Router();
 
 /* GET /users listing. */
-router.get('/ping', function(req, res, next) {
-    DrawDate.findOne({}, function (err, drawDate) {
-        var ping = { date: undefined };
-       if (drawDate) {
-            ping.date = drawDate.date;
-       }
+router.get('/ping', auth.verifyAuthentication(false), function(req, res, next) {
+    DrawDate.findOne(function (err, drawDate) {
+        var pong = { date: undefined };
+        if (drawDate) {
+            pong.date = drawDate.date;
+        }
 
-        res.json(ping);
+        if (req.user) {
+            pong.user = req.user;
+        }
+
+        res.json(pong);
     });
-
 });
 
 router.post('/authenticate', function(req, res) {
