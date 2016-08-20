@@ -88,6 +88,7 @@ app.use(function (err, req, res, next) {
 if (false) {
     var User = mongoose.model('User', require('./models/Users.js'));
     User.find({}).remove(function() {
+        console.log("Init users");
         User.create(
             {
                 name: 'Test A',
@@ -118,6 +119,7 @@ if (false) {
 
     var Card = mongoose.model('Card', require('./models/Cards.js'));
     Card.find({}).remove(function() {
+        console.log("Init cards");
         Card.create(
             {
                 name: 'Card 2',
@@ -128,6 +130,16 @@ if (false) {
                 type: 'c1'
             }
         );
+    });
+
+    var History = mongoose.model('History', require('./models/History.js'));
+    History.find({}).remove(function(){
+        console.log("Removed history");
+    });
+
+    var Messages = mongoose.model('Messages', require('./models/Messages.js'));
+    Messages.find({}).remove(function(){
+        console.log("Removed messages");
     });
 }
 

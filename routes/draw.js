@@ -8,10 +8,17 @@ router.put('/draw-date', function (req, res) {
     drawer
         .setDrawDate(dateToSet.date)
         .then(function () {
+            console.log("Success");
             res.json({});
         }).catch(function () {
-            res.statusCode(400).json({data: 'Bad request'});
+            console.log("Fail");
+            res.status(400).json({data: 'Bad request'});
     });
+});
+
+router.get('/start', function (req, res) {
+    drawer.draw();
+    res.json({});
 });
 
 module.exports = router;
