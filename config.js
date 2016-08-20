@@ -3,7 +3,7 @@
  */
 module.exports = {
     'secret': 'test_secret',
-    'database': 'mongodb://grapeapps:Grape2016@ds063715.mlab.com:63715/parkify-dev',
+    'database': 'mongodb://grapeapps:Grape2016@ds063715.mlab.com:63715/parkify',
     'userRoles': {
         'user': 0,
         'admin': 1

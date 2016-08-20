@@ -9,7 +9,7 @@ var User = mongoose.model('User', require('../models/Users.js'));
 
 /* GET /users listing. */
 router.get('/', function (req, res) {
-    User.find(function (err, users) {
+    User.find({}, '-salt -hashedPassword', function (err, users) {
         if (err) {
             res.status(500).json({data: 'Internal user error.'});
         }
@@ -19,8 +19,10 @@ router.get('/', function (req, res) {
 
 /* POST /users */
 router.post('/', function (req, res) {
-    User.create(req.body, function (err, post) {
+    console.log(req.body);
+    User.create(req.body, '-salt -hashedPassword', function (err, post) {
         if (err) {
+            console.log(err);
             res.status(400).json({data: 'Bad request'});
         }
         res.json(post);
@@ -29,7 +31,7 @@ router.post('/', function (req, res) {
 
 /* GET /users/id */
 router.get('/:id', function (req, res) {
-    User.findById(req.params.id, function (err, post) {
+    User.findById(req.params.id, '-salt -hashedPassword', function (err, post) {
         if (err) {
             res.status(404).json({data: 'User not found.'});
         }

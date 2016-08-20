@@ -53,7 +53,7 @@ function verifyAuthentication(failOnError) {
         .use(readToken(failOnError))
         // Attach user to request
         .use(function(req, res, next) {
-            User.findById(req.userId, function (err, user) {
+            User.findById(req.userId, '-password -salt', function (err, user) {
                 if (err) {
                     console.error("Error on user fin: ", err);
                     if (failOnError) {

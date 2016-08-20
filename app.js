@@ -85,4 +85,36 @@ app.use(function (err, req, res, next) {
 });
 
 
+if (true) {
+    var User = mongoose.model('User', require('./models/Users.js'));
+    User.find({}).remove(function() {
+       User.create(
+           {
+               name: 'Test A',
+               email: 'a',
+               password: 'a',
+               type: 1
+           },
+           {
+               name: 'Test User1',
+               email: 'test1@test.com',
+               password: 'pass',
+               type: 0
+           },
+           {
+               name: 'Test User2',
+               email: 'test2@test.com',
+               password: 'pass',
+               type: 0
+           },
+           {
+               name: 'Test User3',
+               email: 'test3@test.com',
+               password: 'pass',
+               type: 0
+           }
+       );
+    });
+}
+
 module.exports = app;

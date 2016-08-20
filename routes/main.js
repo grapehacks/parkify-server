@@ -34,13 +34,15 @@ router.post('/authenticate', function(req, res) {
         if (!user) {
             res.status(403).json({message: 'Auth failed. User not found.'});
         } else  {
-            if (user.password != req.body.password) {
+            if (!user.authenticate(req.body.password)) {
                 res.status(403).json({message: 'Auth failed. Password incorrect.'});
             } else {
                 var token = jwt.sign({_id: user._id}, req.app.get('jwtTokenSecret'), {
                     expiresIn: 60*60*24 //expires 24 hours
                 });
 
+                user.hashedPassword = undefined;
+                user.salt = undefined;
                 res.json({
                     message: 'Auth succeeded',
                     user: user,
