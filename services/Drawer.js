@@ -142,15 +142,15 @@ var Drawer = function (){
     };
 
     var scheduleDraw = function (drawDate) {
-        console.log("Schedule with date", drawDate);
-        if (job !== undefined){
-            console.log("Previous schedule cancel");
-            job.cancel();
-        }
-        job = schedule.scheduleJob(drawDate, draw);
-        if (!job){
-            job = undefined;
-        }
+        //console.log("Schedule with date", drawDate);
+        //if (job !== undefined){
+        //    console.log("Previous schedule cancel");
+        //    job.cancel();
+        //}
+        ////job = schedule.scheduleJob(drawDate, draw);
+        //if (!job){
+        //    job = undefined;
+        //}
     };
 
     DrawDate.findOne({}, function (err, drawDate) {
