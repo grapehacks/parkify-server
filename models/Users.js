@@ -12,7 +12,9 @@ var UserSchema = new mongoose.Schema({
     rememberLastChoice: {type: Boolean, default: false},
     removed: {type: Boolean, default: false},
     unreadMsgCounter: {type: Number, default: 0, min: 0},
-    card: {type: mongoose.Schema.Types.ObjectId, ref: 'Card'}
+    card: {type: mongoose.Schema.Types.ObjectId, ref: 'Card'},
+    numberOfWins: {type: Number, default: 0, min: 0},
+    numberOfAttempts: {type: Number, default: 0, min: 0}
 });
 
 UserSchema

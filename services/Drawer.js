@@ -60,7 +60,7 @@ var Drawer = function (){
         User.find({'removed': false, 'type': 0, 'participate': 1}).populate('card')
             .exec(function (err, users) {
                     var userDrawData = users.map(function (user) {
-                        // TODO: Find better way to assign weight
+                        // TODO: Use number of wins and attempts to assign weight
                         return {
                             'user': user,
                             'weight': 1.0
@@ -68,11 +68,12 @@ var Drawer = function (){
                     });
 
                     users.forEach(function(user){
-                       if (!user.rememberLastChoice){
+                        if (!user.rememberLastChoice){
                            // If user doesn't remember choice we would clear it choice
                            user.participate = 2;
-                           user.save();
-                       }
+                        }
+                        user.numberOfAttempts += 1;
+                        user.save();
                     });
 
                     Card.find({'removed': false, 'active': true}).populate('user')
@@ -96,6 +97,7 @@ var Drawer = function (){
                                     user: user
                                 });
 
+                                user.numberOfWins += 1;
                                 user.unreadMsgCounter = user.unreadMsgCounter + 1;
                                 user.save();
 
@@ -187,6 +189,7 @@ var Drawer = function (){
 
                                 if (winner) {
                                     winner.card = card;
+                                    winner.numberOfWins += 1;
                                     winner.save();
                                 }
                                 card.user = winner;
