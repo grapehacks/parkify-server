@@ -11,9 +11,9 @@ router.get('/', function (req, res) {
     var counter = req.query.count || config.defaultNumberOfMessagesToReturn;
     Message.find({'user': req.user._id}).sort({'date': -1}).limit(counter).exec(function (err, messages) {
         if (err) {
-            res.status(500).json({data: 'Internal card error'});
+            return res.status(500).json({data: 'Internal card error'});
         }
-        res.json(messages);
+        return res.json(messages);
     });
 });
 
@@ -23,14 +23,14 @@ router.post('/:id/read', function (req, res) {
 
     Message.findByIdAndUpdate(req.params.id, data, {new: true}, function (err, message) {
         if (err) {
-            res.status(404).json({data: 'Message not found.'});
+            res.status(404).json({data: 'User not found.'});
         }
-        req.user.unreadMsgCounter = req.user.unreadMsgCounter - 1;
+        req.user.unreadMsgCounter = req.user.unreadMsgCounter ? req.user.unreadMsgCounter - 1 : 0;
         req.user.save(function (err) {
             if (err) {
-                res.status(500).json({data: 'User error'});
+                return res.status(500).json({data: 'User error'});
             }
-            res.json(message);
+            return res.json(message);
         });
     });
 });

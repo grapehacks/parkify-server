@@ -123,7 +123,7 @@ var Drawer = function (){
                             usersThatHaveNotBeenDrawnAndHaveNotHadACard.forEach(function (user) {
                                 Message.create({
                                     topic: "Przegrałeś",
-                                    text: "Tym razem się nie udało... Graj dalej a może kiedyś się uda.",
+                                    text: "Tym razem się nie udało... Graj dalej, a może kiedyś się uda ]:->",
                                     type: 0,
                                     read: false,
                                     user: user
@@ -178,7 +178,7 @@ var Drawer = function (){
                                 } else if (winner) {
                                     Message.create({
                                         topic: "Wygrałeś",
-                                        text: "Pobież kartę z HR",
+                                        text: "Pobierz kartę z HR",
                                         type: 2,
                                         read: false,
                                         user: winner

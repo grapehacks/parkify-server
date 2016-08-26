@@ -9,7 +9,7 @@ var History = mongoose.model('History', require('../models/History.js'));
 router.get('/last', function (req, res) {
     History.findOne({}, {}, { sort: {'date': -1}}, function (err, last) {
         if (err) {
-            res.status(500).json({data: 'Internal history error'});
+            return res.status(500).json({data: 'Internal history error'});
         }
         res.json(last);
     });
@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
     var counter = req.query.count || 10;
     History.find().sort({'date': -1}).limit(counter).exec(function (err, history) {
         if (err) {
-            res.status(500).json({data: 'Internal history error'});
+            return res.status(500).json({data: 'Internal history error'});
         }
         res.json(history);
     });

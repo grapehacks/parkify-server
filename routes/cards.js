@@ -10,7 +10,7 @@ var Card = mongoose.model('Card', require('../models/Cards.js'));
 router.get('/', function (req, res) {
     Card.find(function (err, cards) {
         if (err) {
-            res.status(500).json({data: 'Internal card error'});
+            return res.status(500).json({data: 'Internal card error'});
         }
         res.json(cards);
     });
@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
     Card.create(req.body, function (err, post) {
         if (err) {
-            res.status(400).json({data: 'Bad request.'});
+            return res.status(400).json({data: 'Bad request.'});
         }
         res.json(post);
     });
@@ -30,7 +30,7 @@ router.post('/', function (req, res) {
 router.get('/:id', function (req, res) {
     Card.findById(req.params.id, function (err, post) {
         if (err) {
-            res.status(404).json({data: 'Card not found.'});
+            return res.status(404).json({data: 'Card not found.'});
         }
         res.json(post);
     });
@@ -40,7 +40,7 @@ router.get('/:id', function (req, res) {
 router.put('/:id', function (req, res) {
     Card.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
         if (err) {
-            res.status(404).json({data: 'Card not found.'});
+            return res.status(404).json({data: 'Card not found.'});
         }
         res.json(post);
     });
@@ -50,12 +50,12 @@ router.put('/:id', function (req, res) {
 router.delete('/:id', function (req, res) {
     Card.findById(req.params.id, req.body, function (err, card) {
         if (err) {
-            res.status(404).json({data: 'Card not found.'});
+            return res.status(404).json({data: 'Card not found.'});
         }
         card.removed = true;
         card.save(function (err) {
             if (err) {
-                res.status(500).json({data: 'Card internal error.'});
+                return res.status(500).json({data: 'Card internal error.'});
             }
             res.json(card);
         });

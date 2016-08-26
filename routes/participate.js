@@ -14,7 +14,7 @@ router.post('/register', function (req, res) {
     user.participate = 1;
     user.save(function (err) {
         if (err) {
-            res.status(500).json({data: 'User internal error.'});
+            return res.status(500).json({data: 'User internal error.'});
         }
         res.json(user);
     });
@@ -29,7 +29,7 @@ router.post('/unregister', function (req, res) {
     user.participate = 0;
     user.save(function (err) {
         if (err) {
-            res.status(500).json({data: 'User internal error.'});
+            return res.status(500).json({data: 'User internal error.'});
         }
         res.json(user);
     });

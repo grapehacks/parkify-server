@@ -91,26 +91,105 @@ if (false) {
         console.log("Init users");
         User.create(
             {
-                name: 'Test A',
-                email: 'a',
-                password: 'a',
+                name: 'Admin',
+                email: 'admin',
+                password: 'admin',
                 type: 1
             },
             {
-                name: 'Test User1',
-                email: 'test1@test.com',
+                name: 'Æwiêk Tomasz',
+                email: 'tocw@grapeup.com',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'Test User2',
-                email: 'test2@test.com',
+                name: 'Darkowski Micha³',
+                email: 'mida@grapeup.com',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'Test User3',
-                email: 'test3@test.com',
+                name: 'Derwisz S³awomir',
+                email: 'slde@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Gomo³a Wojciech',
+                email: 'wogo@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Œcis³owicz Tomasz',
+                email: 'tosc@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Krzemieñ Anna',
+                email: 'ankr@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Cabaj Marek',
+                email: 'maca@grapeup.com',
+                password: 'pass',
+                participate: 0,
+                type: 0
+            },
+            {
+                name: 'Orlikowska Magda',
+                email: 'mata@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Mikuœ Dominika',
+                email: 'domi@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Mazur Pawe³',
+                email: 'pamz@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Janicki Damian',
+                email: 'daja@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Skrzyszewski Krzysztof',
+                email: 'krsk@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Zaj¹c Bartollini',
+                email: 'baza@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Toœ Marcin',
+                email: 'mato@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Klimek Tomasz',
+                email: 'tokl@grapeup.com',
+                password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Ruszczak Marek',
+                email: 'maru@grapeup.com',
                 password: 'pass',
                 type: 0
             }
@@ -122,12 +201,44 @@ if (false) {
         console.log("Init cards");
         Card.create(
             {
-                name: 'Card 2',
-                type: 'c2'
+                name: 'Card D1',
+                type: 'd'
             },
             {
-                name: 'Card 1',
-                type: 'c1'
+                name: 'Card D2',
+                type: 'd'
+            },
+            {
+                name: 'Card D3',
+                type: 'd'
+            },
+            {
+                name: 'Card D4',
+                type: 'd'
+            },
+            {
+                name: 'Card D5',
+                type: 'd'
+            },
+            {
+                name: 'Card B1',
+                type: 'b'
+            },
+            {
+                name: 'Card B2',
+                type: 'b'
+            },
+            {
+                name: 'Card B3',
+                type: 'b'
+            },
+            {
+                name: 'Card B4',
+                type: 'b'
+            },
+            {
+                name: 'Card B5',
+                type: 'b'
             }
         );
     });
