@@ -124,12 +124,14 @@ if (false) {
                 name: 'Œcis³owicz Tomasz',
                 email: 'tosc@grapeup.com',
                 password: 'pass',
+                participate: 0,
                 type: 0
             },
             {
                 name: 'Krzemieñ Anna',
                 email: 'ankr@grapeup.com',
                 password: 'pass',
+                participate: 0,
                 type: 0
             },
             {
@@ -191,6 +193,13 @@ if (false) {
                 name: 'Ruszczak Marek',
                 email: 'maru@grapeup.com',
                 password: 'pass',
+                type: 0
+            },
+            {
+                name: 'Tymchuk Pavlo',
+                email: 'paty@grapeup.com',
+                password: 'pass',
+                participate: 0,
                 type: 0
             }
         );
