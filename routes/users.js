@@ -19,7 +19,6 @@ router.get('/', function (req, res) {
 
 /* POST /users */
 router.post('/', function (req, res) {
-    console.log(req.body);
     User.create(req.body, function (err, post) {
         if (err) {
             console.log(err);
@@ -27,7 +26,12 @@ router.post('/', function (req, res) {
         }
         post.hashedPassword = undefined;
         post.salt = undefined;
-        res.json(post);
+        User.find({'email':post.email}, '-salt -hashedPassword', function (err, user) {
+            if (err) {
+                return res.status(404).json({data: 'User not found.'});
+            }
+            res.json(user);
+        });
     });
 });
 
