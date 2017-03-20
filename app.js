@@ -60,6 +60,7 @@ app.use(function (req, res, next) {
 
 app.use('/', main);
 app.use('/api/users', auth.hasRole('admin'), users);
+app.use('/api/users/:id/licence', auth.verifyAuthentication(true), users);
 app.use('/api/cards', auth.hasRole('admin'), cards);
 app.use('/api/history', auth.hasRole('admin'), history);
 app.use('/api/draw', auth.hasRole('admin'), draw);
@@ -93,36 +94,42 @@ if (false) {
             {
                 name: 'Admin',
                 email: 'admin',
+                licenceNumber: 'KRA AA01',
                 password: 'admin',
                 type: 1
             },
             {
                 name: 'Æwiêk Tomasz',
                 email: 'tocw@grapeup.com',
+                licenceNumber: 'KRA AA02',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Darkowski Micha³',
                 email: 'mida@grapeup.com',
+                licenceNumber: 'KRA AA03',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Derwisz S³awomir',
                 email: 'slde@grapeup.com',
+                licenceNumber: 'KRA AA04',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Gomo³a Wojciech',
                 email: 'wogo@grapeup.com',
+                licenceNumber: 'KRA AA05',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Œcis³owicz Tomasz',
                 email: 'tosc@grapeup.com',
+                licenceNumber: 'KRA AA06',
                 password: 'pass',
                 participate: 0,
                 type: 0
@@ -130,6 +137,7 @@ if (false) {
             {
                 name: 'Krzemieñ Anna',
                 email: 'ankr@grapeup.com',
+                licenceNumber: 'KRA AA07',
                 password: 'pass',
                 participate: 0,
                 type: 0
@@ -137,6 +145,7 @@ if (false) {
             {
                 name: 'Cabaj Marek',
                 email: 'maca@grapeup.com',
+                licenceNumber: 'KRA AA08',
                 password: 'pass',
                 participate: 0,
                 type: 0
@@ -144,60 +153,70 @@ if (false) {
             {
                 name: 'Orlikowska Magda',
                 email: 'mata@grapeup.com',
+                licenceNumber: 'KRA AA09',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Mikuœ Dominika',
                 email: 'domi@grapeup.com',
+                licenceNumber: 'KRA AA10',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Mazur Pawe³',
                 email: 'pamz@grapeup.com',
+                licenceNumber: 'KRA AA11',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Janicki Damian',
                 email: 'daja@grapeup.com',
+                licenceNumber: 'KRA AA12',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Skrzyszewski Krzysztof',
                 email: 'krsk@grapeup.com',
+                licenceNumber: 'KRA AA13',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Zaj¹c Bartollini',
                 email: 'baza@grapeup.com',
+                licenceNumber: 'KRA AA14',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Toœ Marcin',
                 email: 'mato@grapeup.com',
+                licenceNumber: 'KRA AA15',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Klimek Tomasz',
                 email: 'tokl@grapeup.com',
+                licenceNumber: 'KRA AA16',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Ruszczak Marek',
                 email: 'maru@grapeup.com',
+                licenceNumber: 'KRA AA17',
                 password: 'pass',
                 type: 0
             },
             {
                 name: 'Tymchuk Pavlo',
                 email: 'paty@grapeup.com',
+                licenceNumber: 'KRA AA18',
                 password: 'pass',
                 participate: 0,
                 type: 0
@@ -260,6 +279,11 @@ if (false) {
     var Messages = mongoose.model('Messages', require('./models/Messages.js'));
     Messages.find({}).remove(function(){
         console.log("Removed messages");
+    });
+
+    var DrawDate = mongoose.model('DrawDate', require('./models/DrawDate.js'));
+    DrawDate.find({}).remove(function(){
+        console.log("Removed draw dates");
     });
 }
 

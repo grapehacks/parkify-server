@@ -7,6 +7,7 @@ var UserSchema = new mongoose.Schema({
     hashedPassword: String,
     salt: String,
     name: {type: String, unique: true, required: true},
+    licenceNumber: {type: String, unique: true, required: true},
     type: {type: Number, default: 0, min: 0, max: 1},
     participate: {type: Number, default: 1, min: 0, max: 2},
     rememberLastChoice: {type: Boolean, default: false},
