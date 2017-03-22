@@ -59,10 +59,10 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', main);
-app.use('/api/users', auth.hasRole('admin'), users);
+app.use('/api/users', users);
 app.use('/api/users/:id/licence', auth.verifyAuthentication(true), users);
 app.use('/api/cards', auth.hasRole('admin'), cards);
-app.use('/api/history', auth.hasRole('admin'), history);
+app.use('/api/history', history);
 app.use('/api/draw', auth.hasRole('admin'), draw);
 
 app.use('/api/participate', auth.verifyAuthentication(true), participate);

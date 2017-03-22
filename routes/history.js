@@ -1,12 +1,12 @@
 var express = require('express');
 var mongoose = require('mongoose');
-
+var auth = require('../auth/auth');
 var router = express.Router();
 
 var History = mongoose.model('History', require('../models/History.js'));
 
 /* GET /history/last */
-router.get('/last', function (req, res) {
+router.get('/last', auth.verifyAuthentication(true), function (req, res) {
     History.findOne({}, {}, { sort: {'date': -1}})
         .populate('winners.user')
         .populate('winners.card')
@@ -21,7 +21,7 @@ router.get('/last', function (req, res) {
 });
 
 /* GET /history listing. */
-router.get('/', function (req, res) {
+router.get('/', auth.hasRole('admin'), function (req, res) {
     var counter = req.query.count || 10;
     History.find().sort({'date': -1}).limit(counter).exec(function (err, history) {
         if (err) {
