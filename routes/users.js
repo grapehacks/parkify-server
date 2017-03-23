@@ -70,6 +70,34 @@ router.put('/:id/licence', auth.verifyAuthentication(true), function (req, res) 
     });
 });
 
+/* POST /users/:id/changepassword - change users password */
+router.post('/:id/changepassword', auth.verifyAuthentication(true), function (req, res) {
+    User.findById(req.params.id, function (err, user) {
+        if (err) {
+            return res.status(400).json({message: 'User not found.'});
+        } else if(user && !user.authenticate(req.body.oldPassword)) {
+            return res.status(400).json({message: 'Incorrect old password.'});
+        } else if(!user.validatePasswordLength(req.body.newPassword)) {
+            return res.status(400).json({message: 'Password length should be between 4 and 16.'});
+        } else if(!user.validatePassword(req.body.newPassword)) {
+            return res.status(400).json({message: 'New password is not valid. Spaces and double quotes are not permitted.'});
+        } else if(!user.comparePasswords(req.body.newPassword, req.body.confirmPassword)) {
+            return res.status(400).json({message: 'Passwords doesn\'t match.'});
+        }
+
+        user.hashedPassword = user.encryptPassword(req.body.newPassword);
+        user.save(function (err) {
+            if(err) {
+                return res.status(500).json({data: 'Error when saving user.'});
+            } else {
+                user.hashedPassword = undefined;
+                user.salt = undefined;
+                res.json(user);
+            }
+        });
+    });
+});
+
 /* DELETE /users/:id */
 router.delete('/:id', auth.hasRole('admin'), function (req, res) {
     User.findById(req.params.id, '-salt -hashedPassword', function (err, user) {

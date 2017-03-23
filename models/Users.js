@@ -65,6 +65,52 @@ UserSchema.methods = {
         if (!password || !this.salt) return '';
         var salt = new Buffer(this.salt, 'base64');
         return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+    },
+
+    /**
+     * Validates new password length
+     *
+     * @param newPassword
+     * @return {Boolean}
+     */
+    validatePasswordLength: function(newPassword) {
+        return newPassword && newPassword.length >= 4 && newPassword.length <= 16;
+    },
+
+    /**
+     * Validates new password by rules:
+     * <br> - has number
+     * <br> - has letter
+     * <br> - no special characters like 'space' and double quote '"'
+     *
+     * @param newPassword
+     * @return {Boolean}
+     */
+    validatePassword: function(newPassword) {
+        if(!newPassword) {
+            return false;
+        }
+
+        var chars = newPassword.split("");
+        for(var i= 0, len = chars.length; i < len; i++) {
+            var singleChar = chars[i];
+            if(!singleChar.match(/\d/) && !singleChar.match(/[a-zA-Z]/) && singleChar.match(/[ \/"]/)) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+
+    /**
+     * Compares two passwords
+     *
+     * @param newPassword
+     * @param confirmPassword
+     * @return {Boolean}
+     */
+    comparePasswords: function(newPassword, confirmPassword) {
+        return newPassword && newPassword.localeCompare(confirmPassword) === 0;
     }
 };
 
