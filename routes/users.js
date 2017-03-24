@@ -100,17 +100,12 @@ router.post('/:id/changepassword', auth.verifyAuthentication(true), function (re
 
 /* DELETE /users/:id */
 router.delete('/:id', auth.hasRole('admin'), function (req, res) {
-    User.findById(req.params.id, '-salt -hashedPassword', function (err, user) {
+    User.findByIdAndRemove(req.params.id, '-salt -hashedPassword', function (err, user) {
         if (err) {
             return res.status(404).json({data: 'User not found.'});
         }
-        user.removed = true;
-        user.save(function (err) {
-            if (err) {
-                return res.status(500).json({data: 'User internal error.'});
-            }
-            res.json(user);
-        });
+
+        return res.status(200).json({});
     });
 });
 
