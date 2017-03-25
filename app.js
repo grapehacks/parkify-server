@@ -99,35 +99,35 @@ if (false) {
                 type: 1
             },
             {
-                name: '∆wiÍk Tomasz',
+                name: 'ƒÜwiƒôk Tomasz',
                 email: 'tocw@grapeup.com',
                 licenceNumber: 'KRA AA02',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'Darkowski Micha≥',
+                name: 'Darkowski Micha≈Ç',
                 email: 'mida@grapeup.com',
                 licenceNumber: 'KRA AA03',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'Derwisz S≥awomir',
+                name: 'Derwisz S≈Çawomir',
                 email: 'slde@grapeup.com',
                 licenceNumber: 'KRA AA04',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'Gomo≥a Wojciech',
+                name: 'Gomo≈Ça Wojciech',
                 email: 'wogo@grapeup.com',
                 licenceNumber: 'KRA AA05',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'åcis≥owicz Tomasz',
+                name: '≈öcis≈Çowicz Tomasz',
                 email: 'tosc@grapeup.com',
                 licenceNumber: 'KRA AA06',
                 password: 'pass',
@@ -135,7 +135,7 @@ if (false) {
                 type: 0
             },
             {
-                name: 'KrzemieÒ Anna',
+                name: 'Krzemie≈Ñ Anna',
                 email: 'ankr@grapeup.com',
                 licenceNumber: 'KRA AA07',
                 password: 'pass',
@@ -158,14 +158,14 @@ if (false) {
                 type: 0
             },
             {
-                name: 'Mikuú Dominika',
+                name: 'Miku≈õ Dominika',
                 email: 'domi@grapeup.com',
                 licenceNumber: 'KRA AA10',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'Mazur Pawe≥',
+                name: 'Mazur Pawe≈Ç',
                 email: 'pamz@grapeup.com',
                 licenceNumber: 'KRA AA11',
                 password: 'pass',
@@ -186,14 +186,14 @@ if (false) {
                 type: 0
             },
             {
-                name: 'Zajπc Bartollini',
+                name: 'ZajƒÖc Bartollini',
                 email: 'baza@grapeup.com',
                 licenceNumber: 'KRA AA14',
                 password: 'pass',
                 type: 0
             },
             {
-                name: 'Toú Marcin',
+                name: 'To≈õ Marcin',
                 email: 'mato@grapeup.com',
                 licenceNumber: 'KRA AA15',
                 password: 'pass',
