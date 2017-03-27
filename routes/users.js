@@ -16,6 +16,16 @@ router.get('/', auth.hasRole('admin'), function (req, res) {
     });
 });
 
+/* GET /users/like?name listing users with name 'like' something */
+router.get('/like', auth.hasRole('admin'), function (req, res) {
+    User.find({name: new RegExp(req.query.name, 'i')}, '-salt -hashedPassword', function (err, users) {
+        if (err) {
+            return res.status(500).json({data: 'Internal user error.'});
+        }
+        res.json(users);
+    });
+});
+
 /* POST /users */
 router.post('/', auth.hasRole('admin'), function (req, res) {
     User.create(req.body, function (err, post) {
