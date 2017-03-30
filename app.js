@@ -61,7 +61,7 @@ app.use(function (req, res, next) {
 app.use('/', main);
 app.use('/api/users', users);
 app.use('/api/users/:id/licence', auth.verifyAuthentication(true), users);
-app.use('/api/cards', auth.hasRole('admin'), cards);
+app.use('/api/cards', cards);
 app.use('/api/history', history);
 app.use('/api/draw', auth.hasRole('admin'), draw);
 
@@ -93,7 +93,7 @@ if (false) {
         User.create(
             {
                 name: 'Admin',
-                email: 'admin',
+                email: 'admin@grapeup.com',
                 licenceNumber: 'KRA AA01',
                 password: 'admin',
                 type: 1
