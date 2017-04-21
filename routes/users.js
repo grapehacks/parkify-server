@@ -56,6 +56,7 @@ router.get('/:id', auth.hasRole('admin'), function (req, res) {
 
 /* PUT /users/:id */
 router.put('/:id', auth.hasRole('admin'), function (req, res) {
+    delete req.body._id;
     User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
         if (err) {
             return res.status(404).json({data: 'User not found.'});

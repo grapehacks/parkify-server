@@ -48,6 +48,7 @@ router.get('/:id', auth.hasRole('admin'), function (req, res) {
 
 /* PUT /cards/:id */
 router.put('/:id', auth.hasRole('admin'), function (req, res) {
+    delete req.body._id;
     Card.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
         if (err) {
             return res.status(404).json({data: 'Card not found.'});
